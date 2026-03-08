@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+
+<style>
+html, body{
+margin:0;
+padding:0;
+width:100%;
+background:transparent;
+overflow:hidden;
+}
+
+.box{
+width:100%;
+padding:22px 0;
+background:#f8e8ee;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:18px;
+box-sizing:border-box;
+}
+
+.stack{
+display:flex;
+flex-direction:column;
+align-items:center;
+line-height:1.2;
+}
+
+.heart{
+color:#e7a8bb;
+font-size:14px;
+line-height:1;
+}
+
+.count{
+font-family:'Silkscreen', monospace;
+color:#7d7d7d;
+font-size:16px;
+letter-spacing:2px;
+white-space:nowrap;
+}
+
+.label{
+font-family:'Silkscreen', monospace;
+color:#9a9a9a;
+font-size:10px;
+letter-spacing:1px;
+margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<span class="heart">♥</span>
+
+<div class="stack">
+<span class="count" id="count"></span>
+<span class="label">moving day</span>
+</div>
+
+<span class="heart">♥</span>
+</div>
+
+<script>
+const targetDate = new Date("2026-07-14");
+
+function updateCountdown(){
+const today = new Date();
+const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+const end = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
+const el = document.getElementById("count");
+
+if(diff > 0){
+el.textContent = "D-" + diff;
+} else if(diff === 0){
+el.textContent = "D-DAY";
+} else {
+el.textContent = "D+" + Math.abs(diff);
+}
+}
+
+updateCountdown();
+</script>
+
+</body>
+</html>
