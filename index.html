@@ -1,93 +1,226 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moving Day Countdown</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Silkscreen&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg:#fffafb;
+  --panel:#ffffff;
+  --border:#f1cfd9;
+  --border-strong:#e8bcc9;
+  --soft:#fff4f7;
+  --text:#8c868a;
+  --muted:#c9aeb8;
+  --accent:#f7cad7;
+  --shadow:0 6px 22px rgba(215,176,189,0.18);
+}
+
+*{box-sizing:border-box}
+
 html, body{
-margin:0;
-padding:0;
-width:100%;
-background:transparent;
-overflow:hidden;
+  margin:0;
+  padding:0;
+  width:100%;
+  background:transparent;
+  overflow:hidden;
+  font-family:"Nunito", system-ui, sans-serif;
+  color:var(--text);
 }
 
-.box{
-width:100%;
-padding:22px 0;
-background:#f8e8ee;
-border-radius:18px;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:18px;
-box-sizing:border-box;
+body{
+  padding:10px;
 }
 
-.stack{
-display:flex;
-flex-direction:column;
-align-items:center;
-line-height:1.2;
+.widget{
+  width:100%;
+  max-width:340px;
+  margin:0 auto;
+  background:var(--bg);
+  border:2px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:12px 10px 10px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.title{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.03em;
+  min-width:0;
+}
+
+.window-buttons{
+  display:flex;
+  gap:5px;
+  flex:0 0 auto;
+}
+
+.window-btn{
+  width:14px;
+  height:14px;
+  border:1.5px solid var(--border-strong);
+  border-radius:2px;
+  position:relative;
+  background:transparent;
+  padding:0;
+  cursor:default;
+}
+
+.window-btn.expand::before{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
+  right:2px;
+  top:2px;
+  border-top:1.5px solid var(--border-strong);
+  border-right:1.5px solid var(--border-strong);
+}
+
+.window-btn.expand::after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
+  left:2px;
+  bottom:2px;
+  border-left:1.5px solid var(--border-strong);
+  border-bottom:1.5px solid var(--border-strong);
+}
+
+.window-btn.close::before,
+.window-btn.close::after{
+  content:"";
+  position:absolute;
+  left:3px;
+  right:3px;
+  top:6px;
+  height:1.5px;
+  background:var(--border-strong);
+}
+
+.window-btn.close::before{transform:rotate(45deg);}
+.window-btn.close::after{transform:rotate(-45deg);}
+
+.count-card{
+  background:var(--panel);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:18px 12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
 }
 
 .heart{
-color:#e7a8bb;
-font-size:14px;
-line-height:1;
+  color:#e7a8bb;
+  font-size:14px;
+  line-height:1;
+  flex:0 0 auto;
+}
+
+.stack{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  line-height:1.15;
 }
 
 .count{
-font-family:'Silkscreen', monospace;
-color:#7d7d7d;
-font-size:16px;
-letter-spacing:2px;
-white-space:nowrap;
+  font-family:'Silkscreen', monospace;
+  color:#7d7d7d;
+  font-size:16px;
+  letter-spacing:2px;
+  white-space:nowrap;
 }
 
 .label{
-font-family:'Silkscreen', monospace;
-color:#9a9a9a;
-font-size:10px;
-letter-spacing:1px;
-margin-top:5px;
+  margin-top:6px;
+  font-size:12px;
+  font-weight:700;
+  color:#b59aa4;
+  letter-spacing:.04em;
+}
+
+.footer{
+  margin-top:10px;
+  text-align:center;
+  font-size:9px;
+  letter-spacing:.18em;
+  color:#d7c8ce;
+  font-weight:700;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<span class="heart">♥</span>
+<div class="widget">
+  <div class="topbar">
+    <div class="title">
+      <span>☰</span>
+      <span>countdown</span>
+    </div>
 
-<div class="stack">
-<span class="count" id="count"></span>
-<span class="label">moving day</span>
-</div>
+    <div class="window-buttons">
+      <button class="window-btn expand" type="button" aria-hidden="true"></button>
+      <button class="window-btn close" type="button" aria-hidden="true"></button>
+    </div>
+  </div>
 
-<span class="heart">♥</span>
+  <div class="count-card">
+    <span class="heart">♥</span>
+
+    <div class="stack">
+      <span class="count" id="count"></span>
+      <span class="label">moving day</span>
+    </div>
+
+    <span class="heart">♥</span>
+  </div>
+
+  <div class="footer">COUNTDOWN</div>
 </div>
 
 <script>
 const targetDate = new Date("2026-07-14");
 
 function updateCountdown(){
-const today = new Date();
-const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-const end = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
-const el = document.getElementById("count");
+  const today = new Date();
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const end = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
+  const el = document.getElementById("count");
 
-if(diff > 0){
-el.textContent = "D-" + diff;
-} else if(diff === 0){
-el.textContent = "D-DAY";
-} else {
-el.textContent = "D+" + Math.abs(diff);
-}
+  if(diff > 0){
+    el.textContent = "D-" + diff;
+  } else if(diff === 0){
+    el.textContent = "D-DAY";
+  } else {
+    el.textContent = "D+" + Math.abs(diff);
+  }
 }
 
 updateCountdown();
